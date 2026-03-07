@@ -1,36 +1,29 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import HomePage from './pages/HomePage';
 import LoginPage from './pages/LoginPage';
-import SignupPage from './pages/SignupPage'; 
+import SignupPage from './pages/SignupPage'; // Ensure this matches the filename exactly
 
 function App() {
   const [user, setUser] = useState(null);
 
-  // Load user from localStorage on startup
-  useEffect(() => {
-    const savedUser = JSON.parse(localStorage.getItem('userInfo'));
-    if (savedUser) {
-      setUser(savedUser);
-    }
-  }, []);
-
   const handleLogout = () => {
-    localStorage.removeItem('userInfo');
     setUser(null);
-    window.location.href = '/'; // Redirect to guest home
+    localStorage.removeItem('userInfo');
   };
 
   return (
     <Router>
       <Navbar user={user} onLogout={handleLogout} />
-      <main className="container">
-        <Routes>
-          <Route path="/" element={<HomePage user={user} />} />
-          <Route path="/login" element={<LoginPage setUser={setUser} />} />
-        </Routes>
-      </main>
+      <Routes>
+        {/* HomePage handles the Guest/User switch logic internally */}
+        <Route path="/" element={<HomePage user={user} />} />
+        
+        {/* These must be explicitly defined for the links to work */}
+        <Route path="/login" element={<LoginPage setUser={setUser} />} />
+        <Route path="/signup" element={<SignupPage />} />
+      </Routes>
     </Router>
   );
 }

@@ -1,28 +1,31 @@
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 
 const LoginPage = ({ setUser }) => {
-  const navigate = useNavigate();
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const navigate = useNavigate();
 
-  const handleFakeLogin = () => {
-    const fakeUser = { name: "Guest User", email: "guest@example.com" };
-    localStorage.setItem('userInfo', JSON.stringify(fakeUser));
-    setUser(fakeUser);
-    navigate('/'); // Go back to homepage
-  };
+    const handleLogin = (e) => {
+        e.preventDefault();
+        // Fake login for testing homepages
+        const mockUser = { name: "Test User", email };
+        localStorage.setItem('userInfo', JSON.stringify(mockUser));
+        setUser(mockUser);
+        navigate('/');
+    };
 
-  return (
-    <div style={{ padding: '50px', textAlign: 'center' }}>
-      <h1>Login Page</h1>
-      <p>This is a placeholder for your login form.</p>
-      <button 
-        onClick={handleFakeLogin}
-        style={{ padding: '10px 20px', backgroundColor: '#0071dc', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer' }}
-      >
-        Click to Fake Login (Test Homepages)
-      </button>
-    </div>
-  );
+    return (
+        <div className="auth-page">
+            <form className="auth-form" onSubmit={handleLogin}>
+                <h2>Login</h2>
+                <input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} required />
+                <input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} required />
+                <button type="submit" className="auth-main-btn">Login</button>
+                <p>New here? <Link to="/signup">Create an account</Link></p>
+            </form>
+        </div>
+    );
 };
 
 export default LoginPage;
